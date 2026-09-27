@@ -1,0 +1,139 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "2b1bd96b-d96b-4037-8f40-5a4d4f1977a4",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://api.open-meteo.com/v1/forecast?latitude=17.3850&longitude=78.4867&current=temperature_2m,weather_code",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "f2530dc8-9435-4eef-94bf-44248aec9d60",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3c13f46d-bdea-483e-b44e-9d45b5a619fc",
+              "name": "Temperature",
+              "value": "={{$node[\"HTTP Request\"].json.current.temperature_2m}}°C",
+              "type": "string"
+            },
+            {
+              "id": "3d7d92c8-d044-4d3d-b2ac-75de599efc4b",
+              "name": "Weather",
+              "value": "={{$node[\"HTTP Request\"].json.current.weather_code}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        448,
+        0
+      ],
+      "id": "1ef21636-f27b-48d7-b61f-8469bf92a35c",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "sendTo": "sirishasirigiri62@gmail.com",
+        "subject": "☀️ Weather in Hyderabad",
+        "message": "Your weather message",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        0
+      ],
+      "id": "7cd43590-d95a-43be-b0c6-a3d2984664d6",
+      "name": "Send a message",
+      "webhookId": "ef5444c1-94bd-43b8-90e6-40fcf662e4e6",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "N1TGnB4YU6kRyPKU",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "4f45d5ab-fd6b-43bb-ae33-74ebcb9bc310",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "0c713de4994a728a2e4d18277746ac90ecefa57adcfff981345ad3b1237b1c0b"
+  },
+  "nodeGroups": [],
+  "id": "r6bcs4xauyU6IAzM",
+  "tags": []
+}
